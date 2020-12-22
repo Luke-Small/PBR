@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">PBR</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="PhotoBioReactor">Photobioreactor Controls</string>
+
+
+    <string name="controls">Main Menu Controls</string>
+    <string name="spirulina_info">Spirulina Information</string>
+    <string name="devices">Device Information</string>
+
+    <string name="connection_error">There has been a connection issue...</string>
+
+    <string name="btn_apply">Apply Changes</string>
+
+    <string name="growth_rate">Growth Rate:</string>
+    <string name="progress_bar_temp">Temperature: </string>
+    <string name="light_intensity">Light Intensity: </string>
+    <string name="light_cycle">Amount of Light Per Day: </string>
+    <string name="start_time">Start Lighting Time: </string>
+    <string-array name="time_of_day">
+        <item>1:00 a.m.</item>
+        <item>2:00 a.m.</item>
+        <item>3:00 a.m.</item>
+        <item>4:00 a.m.</item>
+        <item>5:00 a.m.</item>
+        <item>6:00 a.m.</item>
+        <item>7:00 a.m.</item>
+        <item>8:00 a.m.</item>
+        <item>8:00 a.m.</item>
+        <item>9:00 a.m.</item>
+        <item>10:00 a.m.</item>
+        <item>11:00 a.m.</item>
+        <item>12:00 p.m.</item>
+        <item>1:00 p.m.</item>
+        <item>2:00 p.m.</item>
+        <item>3:00 p.m.</item>
+        <item>4:00 p.m.</item>
+        <item>5:00 p..m.</item>
+        <item>6:00 p.m.</item>
+        <item>7:00 p.m.</item>
+        <item>8:00 p.m.</item>
+        <item>9:00 p.m.</item>
+        <item>10:00 p.m.</item>
+        <item>11:00 p.m.</item>
+        <item>12:00 a.m.</item>
+    </string-array>
+</resources>
