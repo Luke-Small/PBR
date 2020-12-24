@@ -38,12 +38,11 @@ public class YieldView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         //draw the View
-
         //get half of the width and height as we are working with a circle
         int viewWidthHalf = this.getMeasuredWidth() / 2;
         int viewHeightHalf = this.getMeasuredHeight() / 2;
         //get the radius as half of the width or height, whichever is smaller
-//subtract ten so that it has some space around it
+        //subtract ten so that it has some space around it
         int radius = 0;
         if (viewWidthHalf > viewHeightHalf)
             radius = viewHeightHalf - 10;
