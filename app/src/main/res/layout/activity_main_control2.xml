@@ -34,58 +34,57 @@
 
         <com.example.pbr.YieldView
             android:id="@+id/custView"
-            android:layout_width="fill_parent"
-            android:layout_height="184dp"
+            android:layout_width="392dp"
+            android:layout_height="201dp"
             android:layout_margin="5dp"
-            custom:circleColor="#0AFA02"
-            custom:circleLabel="0%"
+            app:gaugeColor="#AED6AC"
+            app:meterColor="#0EDF06"
+            custom:yieldLabel="0%"
+            app:innerColor="#FFFFFF"
             custom:labelColor="#FFFFFF" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/txtTemp"
-                android:layout_width="260dp"
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
+                android:layout_weight="1"
                 android:text="@string/progress_bar_water_temp" />
 
             <TextView
                 android:id="@+id/tempDigitalOutput"
+                android:layout_width="42dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right" />
+
+            <TextView
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="@string/fahrenheit" />
         </LinearLayout>
 
         <SeekBar
             android:id="@+id/temp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="120"
-            android:progress="88"
-            android:scrollbarSize="20dp" /><!-- set 120 maximum value for the progress -->/>
+            android:max="50"
+            android:progress="35"
+            android:scrollbarSize="20dp" /><!-- set 50 degrees celsius maximum value for the progress -->
 
-        <LinearLayout
+
+        <Switch
+            android:id="@+id/switch2"
             android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txtPRSwitch"
-                android:layout_width="243dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/photoresistor_toggle" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip4"
-                android:layout_width="38dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/photoresistor_toggle" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -176,8 +175,9 @@
         <Button
             android:id="@+id/btnApply"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_apply" />
+            android:layout_height="44dp"
+            android:text="@string/btn_apply"
+            app:backgroundTint="#064C1A" />
 
         <ScrollView
             android:layout_width="match_parent"

@@ -28,12 +28,12 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
     // as necessary.
     private TextView mDataText;
     private TextView txtTemp;
-
+    private int tempSeek, lightSeek, timeSeek;
     String data = "";
     String dataParsed = "";
     String singleParsed = "";
     int temp;
-    //Instantiate seek bars
+    //Instantiate seek bar objects
     private SeekBar seekTemp;
     private SeekBar seekLight;
     private SeekBar seekTime;
@@ -60,12 +60,13 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
         txtTempOutput.setText(Integer.toString(seekTemp.getProgress()));
         txtLightIntensity.setText(Integer.toString(seekLight.getProgress()));
         txtAmountLight.setText(Integer.toString(seekTime.getProgress()));
-        //Custom View which has no known application yeat we shall figure that out later
+
+        //Create YieldView object and prepare for manipulation
         YieldView yourYield;
         yourYield = (YieldView)findViewById(R.id.custView);
+
          mNetworkFragment = NetworkFragment.getInstance(getSupportFragmentManager(), "localhost:8000/lets.html");
          startDownload();
-
 
         /**
          * Event Handler for temperature seekbar
@@ -76,6 +77,8 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
                 txtTempOutput.setText(Integer.toString(progress));
+                double meterValue = getMeterValue(progress, 0, 0);
+                yourYield.setMeterVal(meterValue);
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -98,6 +101,8 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
                 txtLightIntensity.setText(Integer.toString(progress));
+                double meterValue = getMeterValue(0, progress, 0);
+                yourYield.setMeterVal(meterValue);
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -105,7 +110,7 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(MainControlActivity.this, "Light Intensity increased by :" + progressChangedValue,
+                Toast.makeText(MainControlActivity.this, "Light Intensity increased by:" + progressChangedValue,
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -117,7 +122,9 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
-                txtTempOutput.setText(Integer.toString(progress));
+                txtAmountLight.setText(Integer.toString(progress));
+                double meterValue = getMeterValue(0, 0, progress);
+                yourYield.setMeterVal(meterValue);
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -131,6 +138,62 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
         });
     }
 
+    /*
+       Method determines if seekbar values have changed, then change the old
+       value with the new value.
+     */
+    private double getMeterValue(int newTempSeek, int newLightSeek, int newTimeSeek){
+        if(newTempSeek != tempSeek)
+            tempSeek = newTempSeek;
+        if(newLightSeek != lightSeek)
+            lightSeek = newLightSeek;
+        if(newTimeSeek != timeSeek)
+            timeSeek = newTimeSeek;
+        double meterValue = calcMeterValue();
+        return meterValue;
+    }
+
+    private double calcMeterValue(){
+        int meterValue;         //On a scale of 0 to 240 *check this
+        double tempGrams, tempValue, lightGrams, timeGrams;
+        double lightValue = 0;   //assigned to zero for now
+        double timeValue = 0; // dido
+
+        //temperature parabola variables
+        float[] vertex = new float[] {35, 10};  //vertex of parabola held in array literal - optimal yield parameters
+        double y;   //what we find to find which is yield in grams
+        double p = -0.05;          //represents distance between the vertex and the focal point;
+        //float[] focus = new float[2];
+        //double directrix;
+
+        float gramsTotal;                                                        //total amount of grams produced
+
+        final int lightPeak = 100;                                  //light intensity for now just a 0-100 scale
+        final int timePeak = 86400;                               //max amount of light via seconds in a day
+        final int dividend = 240/3;                             //individual property weight on the meter... so 80
+
+        //temperature constants
+        final int tempPeak = 35;                                       //degrees celsius where growth is optimal
+        final int tempDiv = dividend/10; //divide the individual weight by ten to represent the 10 grams
+       //equation of vertical parabola opening down ----- y=-1/2(x-h)^2 + 10
+        tempGrams = p*Math.pow((tempSeek-vertex[0]), 2)+vertex[1];
+        tempValue = tempGrams * tempDiv;   //multiply the weight of each gram relative to the meter value by the amount of grams present
+
+        double sumValue = tempValue + lightValue + timeValue;   //add all values together to get the total value
+        if(sumValue < 0){ //prevents the bar from going to zero
+            sumValue = 0;
+        }
+        //check to insure all is working
+        Log.d("grams based on temp", Double.toString(tempGrams));
+        Log.d("grams based on light", "Nothing for now ");
+        Log.d("grams based on time", "Nothing for now");
+        Log.d("which makes the sum", Double.toString(sumValue));
+        meterValue = (int)sumValue;
+        Log.d("meterval convert to int", Double.toString(meterValue));
+        return meterValue;
+    }
+
+
     private void startDownload() {
         if (!mDownloading && mNetworkFragment!= null) {
             // Execute the async download.
@@ -141,7 +204,6 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
 
     @Override
     public void updateFromDownload(String result) {
-
         if (result != null) {
              try {
                   // JSONArray JA = new JSONArray(result);
