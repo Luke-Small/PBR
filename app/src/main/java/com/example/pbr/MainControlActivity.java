@@ -28,7 +28,9 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
     // as necessary.
     private TextView mDataText;
     private TextView txtTemp;
-    private int tempSeek, lightSeek, timeSeek;
+    //holds the value of the individual properties
+    private int tempSeekValue, lightSeekValue, timeSeekValue;
+
     String data = "";
     String dataParsed = "";
     String singleParsed = "";
@@ -37,8 +39,7 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
     private SeekBar seekTemp;
     private SeekBar seekLight;
     private SeekBar seekTime;
-    // Instantiate maluable textviews
-   // private TextView txtTempOutput;
+    private double meterValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,9 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
          seekTemp = (SeekBar)findViewById(R.id.temp);  //seekbar for temperature control
          seekLight = (SeekBar)findViewById(R.id.light); //seekbar for light intensity
          seekTime = (SeekBar)findViewById(R.id.time);  //seekbar for amount of light per day
-
+        //Create YieldView object and prepare for manipulation
+        YieldView yourYield;
+        yourYield = (YieldView)findViewById(R.id.custView);
         //allocate textViews to their ids xml layout
          mDataText = (TextView)findViewById(R.id.data); //?
 
@@ -56,14 +59,11 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
         TextView txtTempOutput = (TextView) findViewById(R.id.tempDigitalOutput);
         TextView txtLightIntensity = (TextView)findViewById(R.id.lightIntensityOutput);
         TextView txtAmountLight = (TextView)findViewById(R.id.txtAmountLightHours);
-        //set the textview to their current seekbar progress
+        //set the textview and yieldview metervalue to their current seekbar progress
         txtTempOutput.setText(Integer.toString(seekTemp.getProgress()));
         txtLightIntensity.setText(Integer.toString(seekLight.getProgress()));
         txtAmountLight.setText(Integer.toString(seekTime.getProgress()));
-
-        //Create YieldView object and prepare for manipulation
-        YieldView yourYield;
-        yourYield = (YieldView)findViewById(R.id.custView);
+        yourYield.setMeterVal(getMeterValue(seekTemp.getProgress(), seekLight.getProgress(), seekTime.getProgress()));
 
          mNetworkFragment = NetworkFragment.getInstance(getSupportFragmentManager(), "localhost:8000/lets.html");
          startDownload();
@@ -77,7 +77,7 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
                 txtTempOutput.setText(Integer.toString(progress));
-                double meterValue = getMeterValue(progress, 0, 0);
+                meterValue = getMeterValue(progress, lightSeekValue, timeSeekValue);
                 yourYield.setMeterVal(meterValue);
             }
 
@@ -101,7 +101,7 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
                 txtLightIntensity.setText(Integer.toString(progress));
-                double meterValue = getMeterValue(0, progress, 0);
+                meterValue = getMeterValue(tempSeekValue, progress, timeSeekValue);
                 yourYield.setMeterVal(meterValue);
             }
 
@@ -123,7 +123,7 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
                 txtAmountLight.setText(Integer.toString(progress));
-                double meterValue = getMeterValue(0, 0, progress);
+                meterValue = getMeterValue(tempSeekValue, lightSeekValue, progress);
                 yourYield.setMeterVal(meterValue);
             }
 
@@ -139,25 +139,31 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
     }
 
     /*
-       Method determines if seekbar values have changed, then change the old
+       Method determines if seekbar values have changed, then changes the old
        value with the new value.
      */
     private double getMeterValue(int newTempSeek, int newLightSeek, int newTimeSeek){
-        if(newTempSeek != tempSeek)
-            tempSeek = newTempSeek;
-        if(newLightSeek != lightSeek)
-            lightSeek = newLightSeek;
-        if(newTimeSeek != timeSeek)
-            timeSeek = newTimeSeek;
+        if(newTempSeek != tempSeekValue)
+            tempSeekValue = newTempSeek;
+        if(newLightSeek != lightSeekValue)
+            lightSeekValue = newLightSeek;
+        if(newTimeSeek != timeSeekValue)
+            timeSeekValue = newTimeSeek;
         double meterValue = calcMeterValue();
         return meterValue;
     }
 
+    /*
+      Changes the yield view value if depending on seek listeners changes
+     */
     private double calcMeterValue(){
         int meterValue;         //On a scale of 0 to 240 *check this
-        double tempGrams, tempValue, lightGrams, timeGrams;
-        double lightValue = 0;   //assigned to zero for now
-        double timeValue = 0; // dido
+        final int dividend = 240/3;                             //individual property weight on the meter... so 80
+        final int div = dividend/10; //divide the individual weight by ten to represent the 10 grams
+
+        double tempValue;
+        double lightValue;
+        double timeValue;
 
         //temperature parabola variables
         float[] vertex = new float[] {35, 10};  //vertex of parabola held in array literal - optimal yield parameters
@@ -165,28 +171,41 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
         double p = -0.05;          //represents distance between the vertex and the focal point;
         //float[] focus = new float[2];
         //double directrix;
+        final int tempPeak = 35;                                       //degrees celsius where growth is optimal
 
         float gramsTotal;                                                        //total amount of grams produced
-
-        final int lightPeak = 100;                                  //light intensity for now just a 0-100 scale
-        final int timePeak = 86400;                               //max amount of light via seconds in a day
-        final int dividend = 240/3;                             //individual property weight on the meter... so 80
-
-        //temperature constants
-        final int tempPeak = 35;                                       //degrees celsius where growth is optimal
-        final int tempDiv = dividend/10; //divide the individual weight by ten to represent the 10 grams
        //equation of vertical parabola opening down ----- y=-1/2(x-h)^2 + 10
-        tempGrams = p*Math.pow((tempSeek-vertex[0]), 2)+vertex[1];
-        tempValue = tempGrams * tempDiv;   //multiply the weight of each gram relative to the meter value by the amount of grams present
+        double tempGrams = p*Math.pow((tempSeekValue-vertex[0]), 2)+vertex[1];
+        tempValue = tempGrams * div;   //multiply the weight of each gram relative to the meter value by the amount of grams present
 
-        double sumValue = tempValue + lightValue + timeValue;   //add all values together to get the total value
-        if(sumValue < 0){ //prevents the bar from going to zero
+        //light intensity variables
+        final double lightPeak = 900.00;                                  //PAR - light intensity for now just a 0-100 scale
+        final double light_slope = 10/lightPeak;
+        double lightGrams;
+        //linear equation for light intensity //point slope form "(y-y^1)=m(x-x^1)"  slope intercept form "y=mx+b"
+        lightGrams=light_slope*(lightSeekValue-lightPeak)+10;
+        lightValue = lightGrams * div;
+
+
+        //light cycle variables
+        final double timePeak = 86400;                               //max amount of light via seconds in a day
+        final double time_slope = 10/timePeak;
+        //linear equation for light cycle
+        double timeGrams;
+        timeGrams=time_slope*(timeSeekValue-timePeak)+10;
+        timeValue = timeGrams * div;
+
+        //add all values together to get the total value
+        double sumValue = tempValue + lightValue + timeValue;
+        if(sumValue < 0){ //prevents the bar from going below zero
             sumValue = 0;
         }
+        Log.d("time_slope = ", Double.toString(time_slope));
+        Log.d("light_slope = ", Double.toString(light_slope));
         //check to insure all is working
         Log.d("grams based on temp", Double.toString(tempGrams));
-        Log.d("grams based on light", "Nothing for now ");
-        Log.d("grams based on time", "Nothing for now");
+        Log.d("grams based on light", Double.toString(lightGrams));
+        Log.d("grams based on time", Double.toString(timeGrams));
         Log.d("which makes the sum", Double.toString(sumValue));
         meterValue = (int)sumValue;
         Log.d("meterval convert to int", Double.toString(meterValue));
