@@ -1,15 +1,14 @@
 <resources>
     <declare-styleable name="YieldView">
-<<<<<<< HEAD
         <attr name="gaugeColor" format="color" />
         <attr name="meterColor" format="color"></attr>
         <attr name="yieldLabel" format="string"></attr>
         <attr name="labelColor" format="color"></attr>
         <attr name="innerColor" format="color"></attr>
-=======
+
         <attr name="circleColor" format="color" />
         <attr name="circleLabel" format="string"></attr>
-        <attr name="labelColor" format="color"></attr>
->>>>>>> 2f3a5adea85385ceb308f6494b8a33d5d01f5b16
+
+
     </declare-styleable>
 </resources>
