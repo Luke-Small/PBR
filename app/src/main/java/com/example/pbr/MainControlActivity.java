@@ -69,7 +69,7 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
         TextView txtLightIntensity = (TextView)findViewById(R.id.lightIntensityOutput);
         TextView txtAmountLight = (TextView)findViewById(R.id.txtAmountLightHours);
         //set the textview and yieldview metervalue to their current seekbar progress
-        txtTempOutput.setText(Integer.toString(seekTemp.getProgress()));
+        txtTempOutput.setText(Double.toString(((double)seekTemp.getProgress())/100));       //set the temp output to the current rating of the seekbar, ensure it is in decimal places
         txtLightIntensity.setText(Integer.toString(seekLight.getProgress()));
         txtAmountLight.setText(Integer.toString(seekTime.getProgress()));
         yourYield.setMeterVal(getMeterValue(seekTemp.getProgress(), seekLight.getProgress(), seekTime.getProgress()));
@@ -96,7 +96,6 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
                 meterValue = getMeterValue(progressDouble, lightSeekValue, timeSeekValue);
                 Log.d("meterValue = ", Double.toString(meterValue));
                 yourYield.setMeterVal(meterValue);
-                txtTempOutput.setText(Integer.toString(progress));
 
             }
 
