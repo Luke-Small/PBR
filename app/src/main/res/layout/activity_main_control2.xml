@@ -34,6 +34,7 @@
 
         <com.example.pbr.YieldView
             android:id="@+id/custView"
+<<<<<<< HEAD
             android:layout_width="392dp"
             android:layout_height="201dp"
             android:layout_margin="5dp"
@@ -41,10 +42,18 @@
             app:meterColor="#0EDF06"
             custom:yieldLabel="0%"
             app:innerColor="#FFFFFF"
+=======
+            android:layout_width="fill_parent"
+            android:layout_height="184dp"
+            android:layout_margin="5dp"
+            custom:circleColor="#0AFA02"
+            custom:circleLabel="0%"
+>>>>>>> 2f3a5adea85385ceb308f6494b8a33d5d01f5b16
             custom:labelColor="#FFFFFF" />
 
         <LinearLayout
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="30dp"
             android:orientation="horizontal">
 
@@ -53,10 +62,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+=======
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtTemp"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+>>>>>>> 2f3a5adea85385ceb308f6494b8a33d5d01f5b16
                 android:text="@string/progress_bar_water_temp" />
 
             <TextView
                 android:id="@+id/tempDigitalOutput"
+<<<<<<< HEAD
                 android:layout_width="42dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -68,12 +88,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/fahrenheit" />
+=======
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+>>>>>>> 2f3a5adea85385ceb308f6494b8a33d5d01f5b16
         </LinearLayout>
 
         <SeekBar
             android:id="@+id/temp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:max="5000"
             android:min="1500"
             android:progress="3500"
@@ -86,6 +112,30 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/photoresistor_toggle" />
+=======
+            android:max="120"
+            android:progress="88"
+            android:scrollbarSize="20dp" /><!-- set 120 maximum value for the progress -->/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtPRSwitch"
+                android:layout_width="243dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/photoresistor_toggle" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip4"
+                android:layout_width="38dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+>>>>>>> 2f3a5adea85385ceb308f6494b8a33d5d01f5b16
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -112,9 +162,13 @@
         <SeekBar
             android:id="@+id/light"
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="wrap_content"
             android:max="900"
             android:progress="800" />
+=======
+            android:layout_height="wrap_content" />
+>>>>>>> 2f3a5adea85385ceb308f6494b8a33d5d01f5b16
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -139,9 +193,13 @@
         <SeekBar
             android:id="@+id/time"
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="wrap_content"
             android:max="86400"
             android:progress="15000"/>
+=======
+            android:layout_height="wrap_content" />
+>>>>>>> 2f3a5adea85385ceb308f6494b8a33d5d01f5b16
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -180,9 +238,14 @@
         <Button
             android:id="@+id/btnApply"
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="44dp"
             android:text="@string/btn_apply"
             app:backgroundTint="#064C1A" />
+=======
+            android:layout_height="wrap_content"
+            android:text="@string/btn_apply" />
+>>>>>>> 2f3a5adea85385ceb308f6494b8a33d5d01f5b16
 
         <ScrollView
             android:layout_width="match_parent"
