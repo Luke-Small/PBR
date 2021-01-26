@@ -12,6 +12,7 @@ import android.view.View;
 
 public class YieldView extends View {
 
+
     //circle and text colors
     private int gaugeCol, meterCol, labelCol;
     private int meterVal = 0;
@@ -24,6 +25,12 @@ public class YieldView extends View {
 
     private Path pathEmpty;
     private Path pathFull;
+    //circle and text colors
+    private int circleCol;
+    //label text
+    private String circleText;
+    //paint for drawing custom view
+    private Paint circlePaint;
 
     public YieldView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,7 +47,10 @@ public class YieldView extends View {
             yieldText = a.getString(R.styleable.YieldView_yieldLabel);
             gaugeCol = a.getInteger(R.styleable.YieldView_gaugeColor, 0);//0 is default
             meterCol = a.getInteger(R.styleable.YieldView_meterColor, 0);
-            labelCol = a.getInteger(R.styleable.YieldView_labelColor, 0);
+
+        //get the attributes specified in attrs.xml using the name we included
+        //paint object for drawing in onDraw
+        circlePaint = new Paint();;
         } finally {
             a.recycle();
         }
@@ -53,6 +63,7 @@ public class YieldView extends View {
      */
     private void init(){
           //
+
     }
 
     @Override
@@ -67,11 +78,13 @@ public class YieldView extends View {
         //get the radius as half of the width or height, whichever is smaller
         //subtract ten so that it has some space around it
         /*
+
         int radius = 0;
         if (viewWidthHalf > viewHeightHalf)
             radius = viewHeightHalf - 10;
         else
             radius = viewWidthHalf - 10;
+
             */
 //attributes for the empty arc gauge
         gaugePaint.setStyle(Style.STROKE);
@@ -147,6 +160,18 @@ public class YieldView extends View {
         invalidate();
         requestLayout();
     }
+
+    public int getCircleColor(){
+        return circleCol;
+    }
+
+    public void setCircleColor(int newColor){
+        //update the instance variable
+        circleCol=newColor;
+        //redraw the view
+        invalidate();
+        requestLayout();
+    }
     public void setMeterCol(int newColor){
         meterCol=newColor;
         invalidate();
@@ -162,11 +187,16 @@ public class YieldView extends View {
 
     public void setLabelText(String newLabel){
         //update the instance variable
+
         yieldText=newLabel;
+
+        circleText=newLabel;
+
         //redraw the view
         invalidate();
         requestLayout();
     }
+
     /*
     private RectF getOval(Canvas canvas, float factor) {
 
@@ -184,4 +214,5 @@ public class YieldView extends View {
 
         return oval;
     }*/
+
 }

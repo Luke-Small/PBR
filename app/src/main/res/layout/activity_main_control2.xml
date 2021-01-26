@@ -41,6 +41,8 @@
             app:meterColor="#0EDF06"
             custom:yieldLabel="0%"
             app:innerColor="#FFFFFF"
+            custom:circleColor="#0AFA02"
+            custom:circleLabel="0%"
             custom:labelColor="#FFFFFF" />
 
         <LinearLayout
@@ -53,6 +55,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:orientation="horizontal"/>
+
+            <TextView
+                android:id="@+id/txtTemp"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
                 android:text="@string/progress_bar_water_temp" />
 
             <TextView
@@ -74,8 +83,9 @@
             android:id="@+id/temp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="50"
-            android:progress="35"
+            android:max="5000"
+            android:min="1500"
+            android:progress="3500"
             android:scrollbarSize="20dp" /><!-- set 50 degrees celsius maximum value for the progress -->
 
 
@@ -85,6 +95,25 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/photoresistor_toggle" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtPRSwitch"
+                android:layout_width="243dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/photoresistor_toggle" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip4"
+                android:layout_width="38dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

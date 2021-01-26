@@ -14,7 +14,9 @@
 
     <string name="approx_yield">Approximate Yield:</string>
     <string name="progress_bar_water_temp">Water Temperature: </string>
+
     <string name="fahrenheit">    C</string>
+
     <string name="photoresistor_toggle">On/Off Photoresistor Switch:</string>
     <string name="light_intensity_txt">Light Intensity: </string>
     <string name="light_intensity_value">0%</string>

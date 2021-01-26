@@ -28,8 +28,11 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
     // as necessary.
     private TextView mDataText;
     private TextView txtTemp;
+
     //holds the value of the individual properties
-    private int tempSeekValue, lightSeekValue, timeSeekValue;
+    private double tempSeekValue;
+    private int lightSeekValue, timeSeekValue;
+
 
     String data = "";
     String dataParsed = "";
@@ -41,6 +44,10 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
     private SeekBar seekTime;
     private double meterValue;
 
+    // Instantiate maluable textviews
+   // private TextView txtTempOutput;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,9 +56,11 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
          seekTemp = (SeekBar)findViewById(R.id.temp);  //seekbar for temperature control
          seekLight = (SeekBar)findViewById(R.id.light); //seekbar for light intensity
          seekTime = (SeekBar)findViewById(R.id.time);  //seekbar for amount of light per day
+
         //Create YieldView object and prepare for manipulation
         YieldView yourYield;
         yourYield = (YieldView)findViewById(R.id.custView);
+
         //allocate textViews to their ids xml layout
          mDataText = (TextView)findViewById(R.id.data); //?
 
@@ -68,6 +77,7 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
          mNetworkFragment = NetworkFragment.getInstance(getSupportFragmentManager(), "localhost:8000/lets.html");
          startDownload();
 
+
         /**
          * Event Handler for temperature seekbar
           */
@@ -76,9 +86,18 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
-                txtTempOutput.setText(Integer.toString(progress));
-                meterValue = getMeterValue(progress, lightSeekValue, timeSeekValue);
+                int progressInteger = progress; //make a integer copy of progress
+                Log.d("This is the progress", Integer.toString(progress));
+                double progressDouble = (double)progress;
+                Log.d("This pr..Double ", Double.toString(progressDouble));
+                       progressDouble = progressDouble/100;
+                       Log.d("after division of 100 ", Double.toString(progressDouble));
+                txtTempOutput.setText(Double.toString(progressDouble));
+                meterValue = getMeterValue(progressDouble, lightSeekValue, timeSeekValue);
+                Log.d("meterValue = ", Double.toString(meterValue));
                 yourYield.setMeterVal(meterValue);
+                txtTempOutput.setText(Integer.toString(progress));
+
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -110,7 +129,7 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(MainControlActivity.this, "Light Intensity increased by:" + progressChangedValue,
+                Toast.makeText(MainControlActivity.this, "Light Intensity increased by :" + progressChangedValue,
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -122,9 +141,13 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
+
                 txtAmountLight.setText(Integer.toString(progress));
                 meterValue = getMeterValue(tempSeekValue, lightSeekValue, progress);
                 yourYield.setMeterVal(meterValue);
+
+                txtTempOutput.setText(Integer.toString(progress));
+
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -138,11 +161,12 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
         });
     }
 
+
     /*
        Method determines if seekbar values have changed, then changes the old
        value with the new value.
      */
-    private double getMeterValue(int newTempSeek, int newLightSeek, int newTimeSeek){
+    private double getMeterValue(double newTempSeek, int newLightSeek, int newTimeSeek){
         if(newTempSeek != tempSeekValue)
             tempSeekValue = newTempSeek;
         if(newLightSeek != lightSeekValue)
@@ -200,15 +224,15 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
         if(sumValue < 0){ //prevents the bar from going below zero
             sumValue = 0;
         }
-        Log.d("time_slope = ", Double.toString(time_slope));
+      /*  Log.d("time_slope = ", Double.toString(time_slope));
         Log.d("light_slope = ", Double.toString(light_slope));
         //check to insure all is working
         Log.d("grams based on temp", Double.toString(tempGrams));
         Log.d("grams based on light", Double.toString(lightGrams));
         Log.d("grams based on time", Double.toString(timeGrams));
-        Log.d("which makes the sum", Double.toString(sumValue));
+        Log.d("which makes the sum", Double.toString(sumValue));*/
         meterValue = (int)sumValue;
-        Log.d("meterval convert to int", Double.toString(meterValue));
+      //  Log.d("meterval convert to int", Double.toString(meterValue));
         return meterValue;
     }
 
@@ -223,6 +247,7 @@ public class MainControlActivity extends FragmentActivity implements DownloadCal
 
     @Override
     public void updateFromDownload(String result) {
+
         if (result != null) {
              try {
                   // JSONArray JA = new JSONArray(result);

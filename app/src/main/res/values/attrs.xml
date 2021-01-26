@@ -5,5 +5,10 @@
         <attr name="yieldLabel" format="string"></attr>
         <attr name="labelColor" format="color"></attr>
         <attr name="innerColor" format="color"></attr>
+
+        <attr name="circleColor" format="color" />
+        <attr name="circleLabel" format="string"></attr>
+
+
     </declare-styleable>
 </resources>
