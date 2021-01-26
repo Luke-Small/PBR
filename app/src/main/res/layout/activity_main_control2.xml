@@ -74,8 +74,9 @@
             android:id="@+id/temp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="50"
-            android:progress="35"
+            android:max="5000"
+            android:min="1500"
+            android:progress="3500"
             android:scrollbarSize="20dp" /><!-- set 50 degrees celsius maximum value for the progress -->
 
 
